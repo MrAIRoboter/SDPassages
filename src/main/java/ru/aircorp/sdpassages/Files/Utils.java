@@ -4,10 +4,8 @@ import org.bukkit.command.CommandSender;
 import org.bukkit.command.ConsoleCommandSender;
 import org.bukkit.entity.Player;
 
-import java.time.Duration;
-
 public class Utils {
-    public static String GetFormattedTime(int seconds) {
+    public static String GetFormattedTime(int seconds, TimeFormatStruct timeFormat) {
         int absSeconds = Math.abs(seconds);
         int days = absSeconds / (60 * 60 * 24);
         int hours = (absSeconds % (60 * 60 * 24)) / (60 * 60);
@@ -16,16 +14,20 @@ public class Utils {
 
         StringBuilder builder = new StringBuilder();
 
-        if (days > 0) {
-            builder.append(days).append(" д. ");
-        }
-        if (days > 0 || hours > 0) {
-            builder.append(String.format("%d ч. ", hours));
-        }
-        if (days > 0 || hours > 0 || minutes > 0) {
-            builder.append(String.format("%02d м. ", minutes));
-        }
-        builder.append(String.format("%02d с.", remainingSeconds));
+        if(timeFormat.DaysFormat != null)
+            if (days > 0)
+                builder.append(String.format(timeFormat.DaysFormat, days));
+
+        if(timeFormat.HoursFormat != null)
+            if (days > 0 || hours > 0)
+                builder.append(String.format(timeFormat.HoursFormat, hours));
+
+        if(timeFormat.MinutesFormat != null)
+            if (days > 0 || hours > 0 || minutes > 0)
+                builder.append(String.format(timeFormat.MinutesFormat, minutes));
+
+        if(timeFormat.SecondsFormat != null)
+            builder.append(String.format(timeFormat.SecondsFormat, remainingSeconds));
 
         return builder.toString();
     }
@@ -41,7 +43,10 @@ public class Utils {
         return isAdmin;
     }
 
-    public static boolean IsSubcommand(String[] args, String subcommandName){
-        return args[0].equalsIgnoreCase(subcommandName) == true;
+    public static boolean IsSubcommand(String[] args, String subcommandName, int index){
+        if(index > args.length - 1)
+            return false;
+
+        return args[index].equalsIgnoreCase(subcommandName) == true;
     }
 }

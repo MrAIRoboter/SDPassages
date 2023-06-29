@@ -2,6 +2,7 @@ package ru.aircorp.sdpassages;
 
 import me.clip.placeholderapi.expansion.PlaceholderExpansion;
 import org.bukkit.entity.Player;
+import ru.aircorp.sdpassages.Files.TimeFormatStruct;
 import ru.aircorp.sdpassages.Files.Utils;
 
 public class PassagesPlaceholderExpansion extends PlaceholderExpansion {
@@ -18,7 +19,7 @@ public class PassagesPlaceholderExpansion extends PlaceholderExpansion {
 
     @Override
     public String getIdentifier() {
-        return "pass"; // Идентификатор вашего плейсхолдера
+        return "pass"; // Идентификатор плейсхолдера
     }
 
     @Override
@@ -31,7 +32,7 @@ public class PassagesPlaceholderExpansion extends PlaceholderExpansion {
         return "1.0.0";
     }
 
-    // Определяем значение плейсхолдера для каждого игрока
+    // Значение плейсхолдера для каждого игрока
     @Override
     public String onPlaceholderRequest(Player player, String identifier) {
         if (identifier.equalsIgnoreCase("MyTime")) {
@@ -42,7 +43,7 @@ public class PassagesPlaceholderExpansion extends PlaceholderExpansion {
                 if(client.IsUnlimited == true)
                     result = "∞";
                 else
-                    result = Utils.GetFormattedTime(client.GetRemainingTime());
+                    result = Utils.GetFormattedTime(client.GetRemainingTime(), _plugin.GetTimeFormat());
             }
 
             return result;

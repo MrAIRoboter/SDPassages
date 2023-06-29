@@ -16,11 +16,13 @@ public class Core implements CommandExecutor, TabCompleter {
     private AddTimeCommand _addTimeCommand;
     private MyTimeCommand _myTimeCommand;
     private RemainingTimeCommand _remainingTimeCommand;
+    private ReloadCommand _reloadCommand;
 
     public Core(){
         _addTimeCommand = new AddTimeCommand(SDPassages.Instance);
         _myTimeCommand = new MyTimeCommand(SDPassages.Instance);
         _remainingTimeCommand = new RemainingTimeCommand(SDPassages.Instance);
+        _reloadCommand = new ReloadCommand(SDPassages.Instance);
 
         SDPassages.Instance.getCommand("pass").setExecutor(this);
     }
@@ -28,32 +30,32 @@ public class Core implements CommandExecutor, TabCompleter {
     @Override
     public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
         if (args.length == 0) {
-            commandSender.sendMessage(ChatColor.RED + "Создано MrAIRobot");
-            commandSender.sendMessage(ChatColor.DARK_GREEN + "----------------------");
-            commandSender.sendMessage(ChatColor.GREEN + "Комманды " + ChatColor.DARK_GRAY + ">");
-            commandSender.sendMessage(ChatColor.GREEN + "/pass AddTime <Игрок> <Время>");
-            commandSender.sendMessage(ChatColor.GREEN + "/pass MyTime");
-            commandSender.sendMessage(ChatColor.GREEN + "/pass RemainingTime <Игрок>");
-            commandSender.sendMessage(ChatColor.DARK_GREEN + "----------------------");
+            SendHelp(commandSender);
             return true;
         }
 
-        if(_addTimeCommand.onCommand(commandSender, command, label, args) == true){
+        if(_addTimeCommand.IsSubcommandBelong(args) == true){
             _addTimeCommand.executeCommand(commandSender, command, args);
             return true;
         }
 
-        if(_myTimeCommand.onCommand(commandSender, command, label, args) == true) {
+        if(_myTimeCommand.IsSubcommandBelong(args) == true) {
             _myTimeCommand.executeCommand(commandSender, command, args);
             return true;
         }
 
-        if(_remainingTimeCommand.onCommand(commandSender, command, label, args) == true){
-            _myTimeCommand.executeCommand(commandSender, command, args);
+        if(_remainingTimeCommand.IsSubcommandBelong(args) == true){
+            _remainingTimeCommand.executeCommand(commandSender, command, args);
             return true;
         }
 
-        return false;
+        if(_reloadCommand.IsSubcommandBelong(args) == true){
+            _reloadCommand.executeCommand(commandSender, command, args);
+            return true;
+        }
+
+        SendHelp(commandSender);
+        return true;
     }
 
     @Override
@@ -63,7 +65,19 @@ public class Core implements CommandExecutor, TabCompleter {
         completions.addAll(_addTimeCommand.GetTabCompletions(sender, command, label, args));
         completions.addAll(_myTimeCommand.GetTabCompletions(sender, command, label, args));
         completions.addAll(_remainingTimeCommand.GetTabCompletions(sender, command, label, args));
+        completions.addAll(_reloadCommand.GetTabCompletions(sender, command, label, args));
 
         return completions;
+    }
+
+    public void SendHelp(CommandSender commandSender){
+        commandSender.sendMessage(ChatColor.RED + "Создано MrAIRobot");
+        commandSender.sendMessage(ChatColor.DARK_GREEN + "----------------------");
+        commandSender.sendMessage(ChatColor.GREEN + "Комманды " + ChatColor.DARK_GRAY + ">");
+        commandSender.sendMessage(ChatColor.GREEN + "/pass addtime <Игрок> <Время>");
+        commandSender.sendMessage(ChatColor.GREEN + "/pass mytime");
+        commandSender.sendMessage(ChatColor.GREEN + "/pass remaining <Игрок>");
+        commandSender.sendMessage(ChatColor.GREEN + "/pass reload");
+        commandSender.sendMessage(ChatColor.DARK_GREEN + "----------------------");
     }
 }

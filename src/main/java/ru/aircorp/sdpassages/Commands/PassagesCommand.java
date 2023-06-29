@@ -19,11 +19,11 @@ public abstract class PassagesCommand {
         _plugin = plugin;
     }
 
-    public abstract void executeCommand(final CommandSender commandSender, final Command command, final String[] args);
-
-    public abstract boolean onCommand(CommandSender commandSender, Command command, String label, String[] args);
+    protected abstract void executeCommand(final CommandSender commandSender, final Command command, final String[] args);
 
     public abstract List<String> GetTabCompletions(CommandSender sender, Command command, String label, String[] args);
+
+    public abstract boolean IsSubcommandBelong(String[] args);
 
     protected List<String> GetAllOnlinePlayersNames(){
         List<String> playerNames = new ArrayList<>();

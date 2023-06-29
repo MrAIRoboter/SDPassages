@@ -19,8 +19,13 @@ public class AddTimeCommand extends PassagesCommand{
     }
 
     @Override
-    public void executeCommand(CommandSender commandSender, Command command, String[] args) {
-        //args: pass AddTime <Игрок> <Время>
+    protected void executeCommand(CommandSender commandSender, Command command, String[] args) {
+        //args: addtime <Игрок> <Время>
+
+        if(Utils.IsCommandSenderAdmin(commandSender) == false){
+           commandSender.sendMessage("У вас недостаточно прав!");
+           return;
+        }
 
         if(args.length != 3){
             commandSender.sendMessage("Некорректное использование!");
@@ -34,33 +39,33 @@ public class AddTimeCommand extends PassagesCommand{
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        if (Utils.IsSubcommand(args,"AddTime") == true) {
-            if(Utils.IsCommandSenderAdmin(commandSender) == false){
-                commandSender.sendMessage("У вас недостаточно прав!");
-                return true;
-            }
-        }
-
-        return false;
-    }
-
-    @Override
     public List<String> GetTabCompletions(CommandSender sender, Command command, String label, String[] args) {
         List<String> completions = new ArrayList<String>();
         boolean isAdmin = Utils.IsCommandSenderAdmin(sender);
 
-        if (args.length == 1) { // Автодополнение для первого аргумента команды /pass
-            if (isAdmin == true)
-                completions.add("AddTime");
-        }
-        else if (args.length == 2) { // Автодополнение для второго аргумента команды /pass
-            if(isAdmin == true)
-                if (args[0].equalsIgnoreCase("AddTime"))
-                    completions.add("300");
+        if(isAdmin == true){
+            if(args.length == 1)
+                completions.add("addtime");
+
+            if(Utils.IsSubcommand(args, "addtime", 0) == true){
+                switch (args.length){
+                    case 2:
+                        completions.addAll(GetAllOnlinePlayersNames());
+                        break;
+
+                    case 3:
+                        completions.add("3600");
+                        break;
+                }
+            }
         }
 
         return completions;
+    }
+
+    @Override
+    public boolean IsSubcommandBelong(String[] args){
+        return Utils.IsSubcommand(args,"addtime", 0);
     }
 
     private void AddTime(CommandSender commandSender, String playerName, int time){

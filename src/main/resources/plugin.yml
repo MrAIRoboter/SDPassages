@@ -9,8 +9,8 @@ folia-supported: false
 
 commands:
   pass:
-    description: pass command.
-    usage: /pass
+    description: pass command - (description в plugin.yml)
+    usage: /pass - (usage в plugin.yml)
     aliases:
       - pass
 

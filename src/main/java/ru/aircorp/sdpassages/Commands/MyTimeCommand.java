@@ -19,7 +19,7 @@ public class MyTimeCommand extends PassagesCommand{
 
     @Override
     public void executeCommand(CommandSender commandSender, Command command, String[] args) {
-        //args: pass MyTime
+        //args: MyTime
 
         if(args.length != 1){
             commandSender.sendMessage("Некорректное использование!");
@@ -41,7 +41,7 @@ public class MyTimeCommand extends PassagesCommand{
 
                 int remainingTime = senderClient.GetRemainingTime();
 
-                commandSender.sendMessage("Оставшееся у вас время: " + Utils.GetFormattedTime(remainingTime));
+                commandSender.sendMessage("Оставшееся у вас время: " + Utils.GetFormattedTime(remainingTime, _plugin.GetTimeFormat()));
             }
             else{
                 commandSender.sendMessage("Вас нет в системе!");
@@ -50,19 +50,17 @@ public class MyTimeCommand extends PassagesCommand{
     }
 
     @Override
-    public boolean onCommand(CommandSender commandSender, Command command, String label, String[] args) {
-        if (Utils.IsSubcommand(args,"MyTime") == true)
-            return true;
-
-        return false;
-    }
-
-    @Override
     public List<String> GetTabCompletions(CommandSender sender, Command command, String label, String[] args) {
         List<String> completions = new ArrayList<String>();
 
-        completions.add("MyTime");
+        if (args.length == 1)
+            completions.add("mytime");
 
         return completions;
+    }
+
+    @Override
+    public boolean IsSubcommandBelong(String[] args){
+        return Utils.IsSubcommand(args,"mytime", 0);
     }
 }
