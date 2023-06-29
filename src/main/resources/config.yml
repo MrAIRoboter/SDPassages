@@ -1,0 +1,10 @@
+BeginnersRemainingTime: 3600
+TimeFormat:
+  DaysFormat: '%d д. '
+  HoursFormat: '%d ч. '
+  MinutesFormat: '%02d м. '
+  SecondsFormat: '%02d с.'
+Notification:
+  IsEnabled: true
+  RemainingTime: 300
+  Message: 'У вас осталось 5 минут!'
