@@ -186,8 +186,8 @@ public final class SDPassages extends JavaPlugin {
     }
 
     private void UnloadClients(){
-        for (Client client : _clients)
-            UnloadClient(client);
+        while (_clients.stream().count() > 0)
+            UnloadClient(_clients.get(0));
     }
 
     private void RegisterCommands(){
